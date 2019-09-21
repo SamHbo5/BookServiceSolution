@@ -14,7 +14,7 @@ namespace BookService.WebAPI.Data
 
         }
 
-        public override void OnModelCreating(ModelBuilder modelBuilder)
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             // Singularize table names
             modelBuilder.Entity<Publisher>()
