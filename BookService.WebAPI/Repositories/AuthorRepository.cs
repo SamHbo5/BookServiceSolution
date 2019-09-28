@@ -33,7 +33,7 @@ namespace BookService.WebAPI.Repositories
 
         public Author GetById(int id)
         {
-            return db.Authors.FirstOrDefault(a => a.Id == id)
+            return db.Authors.FirstOrDefault(a => a.Id == id);
         }
     }
 }
