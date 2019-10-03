@@ -1,5 +1,6 @@
 ﻿using BookService.WebAPI.Data;
 using BookService.WebAPI.Models;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -7,23 +8,11 @@ using System.Threading.Tasks;
 
 namespace BookService.WebAPI.Repositories
 {
-    public class PublisherRepository
+    public class PublisherRepository : Repository<Publisher>
     {
-        private BookServiceContext db;
-
-        public PublisherRepository(BookServiceContext context)
+        public PublisherRepository(BookServiceContext context) : base(context)
         {
-            db = context;
-        }
 
-        public List<Publisher> List()
-        {
-            return db.Publishers.ToList();
-        }
-
-        public Publisher GetById(int id)
-        {
-            return db.Publishers.FirstOrDefault(p => p.Id == id);
         }
     }
 }
