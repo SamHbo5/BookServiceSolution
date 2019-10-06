@@ -23,24 +23,25 @@ namespace BookService.WebAPI.Controllers
 
         // GET: api/authors
         [HttpGet]
-        public IActionResult GetAuthors()
+        public async Task<IActionResult> GetAuthors()
         {
-            return Ok(repository.List());
+            var authors = await repository.ListAll();
+            return Ok(authors);
         }
 
         // GET: api/Authors/Basic
         [HttpGet]
         [Route("Basic")]
-        public IActionResult GetAuthorBasic()
+        public async Task<IActionResult> GetAuthorBasic()
         {
-            return Ok(repository.ListBasic());
+            return Ok(await repository.ListBasic());
         }
 
         [HttpGet]
         [Route("{id}")]
-        public IActionResult GetAuthor(int id)
+        public async Task<IActionResult> GetAuthor(int id)
         {
-            return Ok(repository.GetById(id));
+            return Ok(await repository.GetById(id));
         }
     }
 }

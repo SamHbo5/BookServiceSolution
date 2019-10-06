@@ -9,36 +9,37 @@ using Microsoft.EntityFrameworkCore;
 
 namespace BookService.WebAPI.Repositories
 {
-    public class BookRepository
+    public class BookRepository : Repository<Book>
     {
-        private BookServiceContext db;
-        public BookRepository(BookServiceContext context)
+        public BookRepository(BookServiceContext context) : base(context)
         {
-            db = context;
+                
+        }
+        public async Task<List<Book>> GetallInclusive()
+        {
+            return await db.Books
+                .Include(p => p.Publisher)
+                .Include(a => a.Author)
+                .ToListAsync();
         }
 
-        public List<Book> List()
+        public async Task<List<BookBasic>> ListBasic()
         {
-            return db.Books.Include(p => p.Publisher).Include(a => a.Author).ToList();
-        }
-
-        public List<BookBasic> ListBasic()
-        {
-            return db.Books.Select(b => new BookBasic
+            return await db.Books.Select(b => new BookBasic
             {
                 Id = b.Id,
                 Title = b.Title
-            }).ToList();
+            }).ToListAsync();
         }
 
-        public BookDetail GetById(int id)
+        public async Task<BookDetail> GetDetailById(int id)
         {
-            var book = db.Books
+            var book = await GetAll()
                 .Include(a => a.Author)
                 .Include(p => p.Publisher)
-                .FirstOrDefault(b => b.Id == id);
+                .FirstOrDefaultAsync(b => b.Id == id);
 
-            return new BookDetail
+            var bookDetail = new BookDetail
             {
                 Id = book.Id,
                 AuthorId = book.Author.Id,
@@ -52,6 +53,8 @@ namespace BookService.WebAPI.Repositories
                 Title = book.Title,
                 Year = book.Year
             };
+
+            return bookDetail;
         }
     }
 }

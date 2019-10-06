@@ -3,6 +3,7 @@ using BookService.WebAPI.Repositories;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
 using System.IO;
+using System.Threading.Tasks;
 
 namespace BookService.WebAPI.Controllers
 {
@@ -19,23 +20,24 @@ namespace BookService.WebAPI.Controllers
         }
 
         [HttpGet]
-        public IActionResult GetBooks()
+        public async Task<IActionResult> GetBooks()
         {
-            return Ok(repository.List());
+            var books = await repository.ListAll();
+            return Ok(books);
         }
 
         [HttpGet]
         [Route("Basic")]
-        public IActionResult GetBookBasic()
+        public async Task<IActionResult> GetBookBasic()
         {
-            return Ok(repository.ListBasic());
+            return Ok(await repository.ListBasic());
         }
 
         [HttpGet]
         [Route("{id}")]
-        public IActionResult GetBook(int id)
+        public async Task<IActionResult> GetBook(int id)
         {
-            return Ok(repository.GetById(id));
+            return Ok(await repository.GetById(id));
         }
 
         [HttpGet]
@@ -48,10 +50,12 @@ namespace BookService.WebAPI.Controllers
 
         [HttpGet]
         [Route("ImageById/{id}")]
-        public IActionResult ImageById(int id)
+        public async Task<IActionResult> ImageById(int id)
         {
-            var filename = repository.GetById(id).FileName;
-            var image = Path.Combine(_hostingEnvironment.WebRootPath, "images", filename);
+            //var filename = repository.GetById(id).Result.FileName;
+            var book = await repository.GetById(id);
+            
+            var image = Path.Combine(_hostingEnvironment.WebRootPath, "images", book.FileName);
             return PhysicalFile(image, "image/jpeg");
         }
     }
