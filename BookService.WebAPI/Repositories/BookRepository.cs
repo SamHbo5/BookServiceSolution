@@ -15,7 +15,7 @@ namespace BookService.WebAPI.Repositories
         {
                 
         }
-        public async Task<List<Book>> GetallInclusive()
+        public async Task<List<Book>> GetAllInclusive()
         {
             return await db.Books
                 .Include(p => p.Publisher)

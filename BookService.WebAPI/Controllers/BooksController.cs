@@ -1,43 +1,37 @@
-﻿using BookService.WebAPI.Models;
+﻿using System.IO;
+using System.Threading.Tasks;
+using BookService.WebAPI.Models;
 using BookService.WebAPI.Repositories;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using System.IO;
-using System.Threading.Tasks;
 
 namespace BookService.WebAPI.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class BooksController : ControllerBase
+    public class BooksController : ControllerCrudBase<Book, BookRepository>
     {
-        BookRepository repository;
         IHostingEnvironment _hostingEnvironment;
 
-        public BooksController(BookRepository bookRepository)
+        public BooksController(BookRepository bookRepository, IHostingEnvironment hostingEnvironment) : base(bookRepository)
         {
-            repository = bookRepository;
+            _hostingEnvironment = hostingEnvironment;
         }
 
+        // GET: api/Books 
         [HttpGet]
-        public async Task<IActionResult> GetBooks()
+        public override async Task<IActionResult> Get()
         {
-            var books = await repository.ListAll();
-            return Ok(books);
+            return Ok(await repository.GetAllInclusive());
         }
 
+        // GET: api/Books/Basic 
         [HttpGet]
         [Route("Basic")]
-        public async Task<IActionResult> GetBookBasic()
+        public async Task<IActionResult> GetBooksBasic()
         {
             return Ok(await repository.ListBasic());
-        }
-
-        [HttpGet]
-        [Route("{id}")]
-        public async Task<IActionResult> GetBook(int id)
-        {
-            return Ok(await repository.GetById(id));
         }
 
         [HttpGet]
@@ -54,9 +48,27 @@ namespace BookService.WebAPI.Controllers
         {
             //var filename = repository.GetById(id).Result.FileName;
             var book = await repository.GetById(id);
-            
+
             var image = Path.Combine(_hostingEnvironment.WebRootPath, "images", book.FileName);
             return PhysicalFile(image, "image/jpeg");
+        }
+
+        // POST: api/books/image/
+        [HttpPost]
+        [Route("Image")]
+        public async Task<IActionResult> Image(IFormFile formFile)
+        {
+            var filePath = Path.Combine(_hostingEnvironment.WebRootPath, "images", formFile.FileName);
+
+            if (formFile.Length > 0)
+            {
+                using (var stream = new FileStream(filePath, FileMode.Create))
+                {
+                    await formFile.CopyToAsync(stream);
+                }
+            }
+
+            return Ok(new { count = 1, formFile.Length });
         }
     }
 }

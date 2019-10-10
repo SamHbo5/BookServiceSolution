@@ -10,8 +10,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace BookService.WebAPI.Migrations
 {
     [DbContext(typeof(BookServiceContext))]
-    [Migration("20191003163308_InitialCreate")]
-    partial class InitialCreate
+    [Migration("20191010171214_GenericController")]
+    partial class GenericController
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -46,7 +46,7 @@ namespace BookService.WebAPI.Migrations
                         {
                             Id = 1,
                             BirthDate = new DateTime(1980, 5, 20, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Created = new DateTime(2019, 10, 3, 18, 33, 8, 794, DateTimeKind.Local).AddTicks(4311),
+                            Created = new DateTime(2019, 10, 10, 19, 12, 14, 163, DateTimeKind.Local).AddTicks(475),
                             FirstName = "James",
                             LastName = "Sharp"
                         },
@@ -54,7 +54,7 @@ namespace BookService.WebAPI.Migrations
                         {
                             Id = 2,
                             BirthDate = new DateTime(1992, 3, 4, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Created = new DateTime(2019, 10, 3, 18, 33, 8, 794, DateTimeKind.Local).AddTicks(4477),
+                            Created = new DateTime(2019, 10, 10, 19, 12, 14, 163, DateTimeKind.Local).AddTicks(587),
                             FirstName = "Sophie",
                             LastName = "Netty"
                         },
@@ -62,7 +62,7 @@ namespace BookService.WebAPI.Migrations
                         {
                             Id = 3,
                             BirthDate = new DateTime(1996, 8, 12, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Created = new DateTime(2019, 10, 3, 18, 33, 8, 794, DateTimeKind.Local).AddTicks(4532),
+                            Created = new DateTime(2019, 10, 10, 19, 12, 14, 163, DateTimeKind.Local).AddTicks(686),
                             FirstName = "Elisa",
                             LastName = "Yammy"
                         });
@@ -74,7 +74,7 @@ namespace BookService.WebAPI.Migrations
                         .ValueGeneratedOnAdd()
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<int?>("AuthorId");
+                    b.Property<int>("AuthorId");
 
                     b.Property<DateTime?>("Created")
                         .ValueGeneratedOnAddOrUpdate()
@@ -88,7 +88,7 @@ namespace BookService.WebAPI.Migrations
 
                     b.Property<decimal>("Price");
 
-                    b.Property<int?>("PublisherId");
+                    b.Property<int>("PublisherId");
 
                     b.Property<string>("Title");
 
@@ -212,14 +212,14 @@ namespace BookService.WebAPI.Migrations
                         {
                             Id = 1,
                             Country = "UK",
-                            Created = new DateTime(2019, 10, 3, 18, 33, 8, 795, DateTimeKind.Local).AddTicks(3273),
+                            Created = new DateTime(2019, 10, 10, 19, 12, 14, 164, DateTimeKind.Local).AddTicks(342),
                             Name = "IT-publishers"
                         },
                         new
                         {
                             Id = 2,
                             Country = "Sweden",
-                            Created = new DateTime(2019, 10, 3, 18, 33, 8, 795, DateTimeKind.Local).AddTicks(3339),
+                            Created = new DateTime(2019, 10, 10, 19, 12, 14, 164, DateTimeKind.Local).AddTicks(402),
                             Name = "FoodBooks"
                         });
                 });
@@ -228,11 +228,13 @@ namespace BookService.WebAPI.Migrations
                 {
                     b.HasOne("BookService.WebAPI.Models.Author", "Author")
                         .WithMany()
-                        .HasForeignKey("AuthorId");
+                        .HasForeignKey("AuthorId")
+                        .OnDelete(DeleteBehavior.Cascade);
 
                     b.HasOne("BookService.WebAPI.Models.Publisher", "Publisher")
                         .WithMany()
-                        .HasForeignKey("PublisherId");
+                        .HasForeignKey("PublisherId")
+                        .OnDelete(DeleteBehavior.Cascade);
                 });
 #pragma warning restore 612, 618
         }

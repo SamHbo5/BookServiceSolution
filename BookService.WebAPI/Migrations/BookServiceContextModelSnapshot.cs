@@ -44,7 +44,7 @@ namespace BookService.WebAPI.Migrations
                         {
                             Id = 1,
                             BirthDate = new DateTime(1980, 5, 20, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Created = new DateTime(2019, 10, 3, 18, 33, 8, 795, DateTimeKind.Local).AddTicks(8350),
+                            Created = new DateTime(2019, 10, 10, 19, 12, 14, 164, DateTimeKind.Local).AddTicks(5918),
                             FirstName = "James",
                             LastName = "Sharp"
                         },
@@ -52,7 +52,7 @@ namespace BookService.WebAPI.Migrations
                         {
                             Id = 2,
                             BirthDate = new DateTime(1992, 3, 4, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Created = new DateTime(2019, 10, 3, 18, 33, 8, 795, DateTimeKind.Local).AddTicks(8454),
+                            Created = new DateTime(2019, 10, 10, 19, 12, 14, 164, DateTimeKind.Local).AddTicks(5989),
                             FirstName = "Sophie",
                             LastName = "Netty"
                         },
@@ -60,7 +60,7 @@ namespace BookService.WebAPI.Migrations
                         {
                             Id = 3,
                             BirthDate = new DateTime(1996, 8, 12, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Created = new DateTime(2019, 10, 3, 18, 33, 8, 795, DateTimeKind.Local).AddTicks(8505),
+                            Created = new DateTime(2019, 10, 10, 19, 12, 14, 164, DateTimeKind.Local).AddTicks(6039),
                             FirstName = "Elisa",
                             LastName = "Yammy"
                         });
@@ -72,7 +72,7 @@ namespace BookService.WebAPI.Migrations
                         .ValueGeneratedOnAdd()
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<int?>("AuthorId");
+                    b.Property<int>("AuthorId");
 
                     b.Property<DateTime?>("Created")
                         .ValueGeneratedOnAddOrUpdate()
@@ -86,7 +86,7 @@ namespace BookService.WebAPI.Migrations
 
                     b.Property<decimal>("Price");
 
-                    b.Property<int?>("PublisherId");
+                    b.Property<int>("PublisherId");
 
                     b.Property<string>("Title");
 
@@ -210,14 +210,14 @@ namespace BookService.WebAPI.Migrations
                         {
                             Id = 1,
                             Country = "UK",
-                            Created = new DateTime(2019, 10, 3, 18, 33, 8, 796, DateTimeKind.Local).AddTicks(2391),
+                            Created = new DateTime(2019, 10, 10, 19, 12, 14, 165, DateTimeKind.Local).AddTicks(231),
                             Name = "IT-publishers"
                         },
                         new
                         {
                             Id = 2,
                             Country = "Sweden",
-                            Created = new DateTime(2019, 10, 3, 18, 33, 8, 796, DateTimeKind.Local).AddTicks(2448),
+                            Created = new DateTime(2019, 10, 10, 19, 12, 14, 165, DateTimeKind.Local).AddTicks(285),
                             Name = "FoodBooks"
                         });
                 });
@@ -226,11 +226,13 @@ namespace BookService.WebAPI.Migrations
                 {
                     b.HasOne("BookService.WebAPI.Models.Author", "Author")
                         .WithMany()
-                        .HasForeignKey("AuthorId");
+                        .HasForeignKey("AuthorId")
+                        .OnDelete(DeleteBehavior.Cascade);
 
                     b.HasOne("BookService.WebAPI.Models.Publisher", "Publisher")
                         .WithMany()
-                        .HasForeignKey("PublisherId");
+                        .HasForeignKey("PublisherId")
+                        .OnDelete(DeleteBehavior.Cascade);
                 });
 #pragma warning restore 612, 618
         }

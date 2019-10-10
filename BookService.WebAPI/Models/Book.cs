@@ -25,5 +25,9 @@ namespace BookService.WebAPI.Models
         public decimal Price { get; set; }
 
         public string Year { get; set; }
+
+        public int PublisherId { get; set; }
+
+        public int AuthorId { get; set; }
     }
 }
