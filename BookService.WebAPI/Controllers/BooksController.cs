@@ -70,5 +70,13 @@ namespace BookService.WebAPI.Controllers
 
             return Ok(new { count = 1, formFile.Length });
         }
+
+        // GET: api/Books/Detail/6
+        [HttpGet]
+        [Route("Detail/{id}")]
+        public async Task<IActionResult> GetBookDetail(int id)
+        {
+            return Ok(await repository.GetDetailById(id));
+        }
     }
 }
