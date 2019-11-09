@@ -11,11 +11,29 @@ namespace BookService.WebAPI.Data
     {
         public BookServiceContext(DbContextOptions<BookServiceContext> options) : base(options)
         {
-
         }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            modelBuilder.Entity<Reader>().ToTable("Reader")
+                .HasData(
+                    new Reader(1, "Jean-Claude", "Godefroid"),
+                    new Reader(2, "Phillipe", "Champagne"),
+                    new Reader(3, "Baptiste", "Bourgogne")
+                );
+
+            modelBuilder.Entity<Rating>().ToTable("Rating")
+                .HasData(
+                    new Rating(1, 1, 1, 3),
+                    new Rating(2, 2, 2, 4),
+                    new Rating(3, 1, 3, 3),
+                    new Rating(4, 1, 7, 2),
+                    new Rating(5, 2, 4, 5),
+                    new Rating(6, 2, 5, 4),
+                    new Rating(7, 3, 6, 2),
+                    new Rating(8, 3, 1, 2)
+                    );
+
             // Singularize table names
             modelBuilder.Entity<Publisher>()
                 .ToTable("Publisher")
@@ -146,6 +164,7 @@ namespace BookService.WebAPI.Data
                     Year = "2019"
                 });
 
+
             modelBuilder.Entity<Publisher>()
                 .Property(p => p.Created)
                 .HasDefaultValueSql("GETDATE()")
@@ -160,9 +179,14 @@ namespace BookService.WebAPI.Data
                 .Property(p => p.Created)
                 .HasDefaultValueSql("GETDATE()")
                 .ValueGeneratedOnAddOrUpdate();
+
         }
         public DbSet<Publisher> Publishers { get; set; }
         public DbSet<Author> Authors { get; set; }
         public DbSet<Book> Books { get; set; }
+        public DbSet<Reader> Readers { get; set; }
+        public DbSet<Rating> Ratings { get; set; }
+
+
     }
 }

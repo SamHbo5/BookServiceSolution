@@ -4,7 +4,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace BookService.WebAPI.Migrations
 {
-    public partial class GenericController : Migration
+    public partial class initialCreate : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -40,6 +40,21 @@ namespace BookService.WebAPI.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "Reader",
+                columns: table => new
+                {
+                    Id = table.Column<int>(nullable: false)
+                        .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
+                    Created = table.Column<DateTime>(nullable: true),
+                    FirstName = table.Column<string>(nullable: true),
+                    LastName = table.Column<string>(nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Reader", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Book",
                 columns: table => new
                 {
@@ -49,11 +64,11 @@ namespace BookService.WebAPI.Migrations
                     Title = table.Column<string>(nullable: true),
                     ISBN = table.Column<string>(nullable: true),
                     NumberOfPages = table.Column<int>(nullable: false),
+                    AuthorId = table.Column<int>(nullable: false),
+                    PublisherId = table.Column<int>(nullable: false),
                     FileName = table.Column<string>(nullable: true),
                     Price = table.Column<decimal>(nullable: false),
-                    Year = table.Column<string>(nullable: true),
-                    PublisherId = table.Column<int>(nullable: false),
-                    AuthorId = table.Column<int>(nullable: false)
+                    Year = table.Column<string>(nullable: true)
                 },
                 constraints: table =>
                 {
@@ -68,6 +83,34 @@ namespace BookService.WebAPI.Migrations
                         name: "FK_Book_Publisher_PublisherId",
                         column: x => x.PublisherId,
                         principalTable: "Publisher",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Rating",
+                columns: table => new
+                {
+                    Id = table.Column<int>(nullable: false)
+                        .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
+                    Created = table.Column<DateTime>(nullable: true),
+                    ReaderId = table.Column<int>(nullable: false),
+                    BookId = table.Column<int>(nullable: false),
+                    Score = table.Column<int>(nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Rating", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Rating_Book_BookId",
+                        column: x => x.BookId,
+                        principalTable: "Book",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_Rating_Reader_ReaderId",
+                        column: x => x.ReaderId,
+                        principalTable: "Reader",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
@@ -96,6 +139,16 @@ namespace BookService.WebAPI.Migrations
                 table: "Publisher",
                 columns: new[] { "Id", "Country", "Name" },
                 values: new object[] { 2, "Sweden", "FoodBooks" });
+
+            migrationBuilder.InsertData(
+                table: "Reader",
+                columns: new[] { "Id", "Created", "FirstName", "LastName" },
+                values: new object[,]
+                {
+                    { 1, new DateTime(2019, 11, 9, 12, 28, 57, 764, DateTimeKind.Local).AddTicks(981), "Jean-Claude", "Godefroid" },
+                    { 2, new DateTime(2019, 11, 9, 12, 28, 57, 764, DateTimeKind.Local).AddTicks(1067), "Phillipe", "Champagne" },
+                    { 3, new DateTime(2019, 11, 9, 12, 28, 57, 764, DateTimeKind.Local).AddTicks(1161), "Baptiste", "Bourgogne" }
+                });
 
             migrationBuilder.InsertData(
                 table: "Book",
@@ -132,6 +185,21 @@ namespace BookService.WebAPI.Migrations
                 columns: new[] { "Id", "AuthorId", "FileName", "ISBN", "NumberOfPages", "Price", "PublisherId", "Title", "Year" },
                 values: new object[] { 7, 3, "book3.jpg", "94521546", 53, 40m, 2, "Secret recipes", "2019" });
 
+            migrationBuilder.InsertData(
+                table: "Rating",
+                columns: new[] { "Id", "BookId", "Created", "ReaderId", "Score" },
+                values: new object[,]
+                {
+                    { 1, 1, new DateTime(2019, 11, 9, 12, 28, 57, 754, DateTimeKind.Local).AddTicks(6321), 1, 3 },
+                    { 8, 1, new DateTime(2019, 11, 9, 12, 28, 57, 754, DateTimeKind.Local).AddTicks(6822), 3, 2 },
+                    { 2, 2, new DateTime(2019, 11, 9, 12, 28, 57, 754, DateTimeKind.Local).AddTicks(6431), 2, 4 },
+                    { 3, 3, new DateTime(2019, 11, 9, 12, 28, 57, 754, DateTimeKind.Local).AddTicks(6539), 1, 3 },
+                    { 5, 4, new DateTime(2019, 11, 9, 12, 28, 57, 754, DateTimeKind.Local).AddTicks(6657), 2, 5 },
+                    { 6, 5, new DateTime(2019, 11, 9, 12, 28, 57, 754, DateTimeKind.Local).AddTicks(6712), 2, 4 },
+                    { 7, 6, new DateTime(2019, 11, 9, 12, 28, 57, 754, DateTimeKind.Local).AddTicks(6768), 3, 2 },
+                    { 4, 7, new DateTime(2019, 11, 9, 12, 28, 57, 754, DateTimeKind.Local).AddTicks(6600), 1, 2 }
+                });
+
             migrationBuilder.CreateIndex(
                 name: "IX_Book_AuthorId",
                 table: "Book",
@@ -141,12 +209,28 @@ namespace BookService.WebAPI.Migrations
                 name: "IX_Book_PublisherId",
                 table: "Book",
                 column: "PublisherId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Rating_BookId",
+                table: "Rating",
+                column: "BookId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Rating_ReaderId",
+                table: "Rating",
+                column: "ReaderId");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
+                name: "Rating");
+
+            migrationBuilder.DropTable(
                 name: "Book");
+
+            migrationBuilder.DropTable(
+                name: "Reader");
 
             migrationBuilder.DropTable(
                 name: "Author");

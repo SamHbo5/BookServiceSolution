@@ -10,8 +10,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace BookService.WebAPI.Migrations
 {
     [DbContext(typeof(BookServiceContext))]
-    [Migration("20191010171214_GenericController")]
-    partial class GenericController
+    [Migration("20191109112857_initialCreate")]
+    partial class initialCreate
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -46,7 +46,7 @@ namespace BookService.WebAPI.Migrations
                         {
                             Id = 1,
                             BirthDate = new DateTime(1980, 5, 20, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Created = new DateTime(2019, 10, 10, 19, 12, 14, 163, DateTimeKind.Local).AddTicks(475),
+                            Created = new DateTime(2019, 11, 9, 12, 28, 57, 849, DateTimeKind.Local).AddTicks(4211),
                             FirstName = "James",
                             LastName = "Sharp"
                         },
@@ -54,7 +54,7 @@ namespace BookService.WebAPI.Migrations
                         {
                             Id = 2,
                             BirthDate = new DateTime(1992, 3, 4, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Created = new DateTime(2019, 10, 10, 19, 12, 14, 163, DateTimeKind.Local).AddTicks(587),
+                            Created = new DateTime(2019, 11, 9, 12, 28, 57, 849, DateTimeKind.Local).AddTicks(4314),
                             FirstName = "Sophie",
                             LastName = "Netty"
                         },
@@ -62,7 +62,7 @@ namespace BookService.WebAPI.Migrations
                         {
                             Id = 3,
                             BirthDate = new DateTime(1996, 8, 12, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Created = new DateTime(2019, 10, 10, 19, 12, 14, 163, DateTimeKind.Local).AddTicks(686),
+                            Created = new DateTime(2019, 11, 9, 12, 28, 57, 849, DateTimeKind.Local).AddTicks(4371),
                             FirstName = "Elisa",
                             LastName = "Yammy"
                         });
@@ -212,15 +212,144 @@ namespace BookService.WebAPI.Migrations
                         {
                             Id = 1,
                             Country = "UK",
-                            Created = new DateTime(2019, 10, 10, 19, 12, 14, 164, DateTimeKind.Local).AddTicks(342),
+                            Created = new DateTime(2019, 11, 9, 12, 28, 57, 850, DateTimeKind.Local).AddTicks(2580),
                             Name = "IT-publishers"
                         },
                         new
                         {
                             Id = 2,
                             Country = "Sweden",
-                            Created = new DateTime(2019, 10, 10, 19, 12, 14, 164, DateTimeKind.Local).AddTicks(402),
+                            Created = new DateTime(2019, 11, 9, 12, 28, 57, 850, DateTimeKind.Local).AddTicks(2642),
                             Name = "FoodBooks"
+                        });
+                });
+
+            modelBuilder.Entity("BookService.WebAPI.Models.Rating", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<int>("BookId");
+
+                    b.Property<DateTime?>("Created");
+
+                    b.Property<int>("ReaderId");
+
+                    b.Property<int>("Score");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("BookId");
+
+                    b.HasIndex("ReaderId");
+
+                    b.ToTable("Rating");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            BookId = 1,
+                            Created = new DateTime(2019, 11, 9, 12, 28, 57, 850, DateTimeKind.Local).AddTicks(3745),
+                            ReaderId = 1,
+                            Score = 3
+                        },
+                        new
+                        {
+                            Id = 2,
+                            BookId = 2,
+                            Created = new DateTime(2019, 11, 9, 12, 28, 57, 850, DateTimeKind.Local).AddTicks(3821),
+                            ReaderId = 2,
+                            Score = 4
+                        },
+                        new
+                        {
+                            Id = 3,
+                            BookId = 3,
+                            Created = new DateTime(2019, 11, 9, 12, 28, 57, 850, DateTimeKind.Local).AddTicks(3882),
+                            ReaderId = 1,
+                            Score = 3
+                        },
+                        new
+                        {
+                            Id = 4,
+                            BookId = 7,
+                            Created = new DateTime(2019, 11, 9, 12, 28, 57, 850, DateTimeKind.Local).AddTicks(3942),
+                            ReaderId = 1,
+                            Score = 2
+                        },
+                        new
+                        {
+                            Id = 5,
+                            BookId = 4,
+                            Created = new DateTime(2019, 11, 9, 12, 28, 57, 850, DateTimeKind.Local).AddTicks(4036),
+                            ReaderId = 2,
+                            Score = 5
+                        },
+                        new
+                        {
+                            Id = 6,
+                            BookId = 5,
+                            Created = new DateTime(2019, 11, 9, 12, 28, 57, 850, DateTimeKind.Local).AddTicks(4095),
+                            ReaderId = 2,
+                            Score = 4
+                        },
+                        new
+                        {
+                            Id = 7,
+                            BookId = 6,
+                            Created = new DateTime(2019, 11, 9, 12, 28, 57, 850, DateTimeKind.Local).AddTicks(4154),
+                            ReaderId = 3,
+                            Score = 2
+                        },
+                        new
+                        {
+                            Id = 8,
+                            BookId = 1,
+                            Created = new DateTime(2019, 11, 9, 12, 28, 57, 850, DateTimeKind.Local).AddTicks(4211),
+                            ReaderId = 3,
+                            Score = 2
+                        });
+                });
+
+            modelBuilder.Entity("BookService.WebAPI.Models.Reader", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<DateTime?>("Created");
+
+                    b.Property<string>("FirstName");
+
+                    b.Property<string>("LastName");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Reader");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            Created = new DateTime(2019, 11, 9, 12, 28, 57, 850, DateTimeKind.Local).AddTicks(5700),
+                            FirstName = "Jean-Claude",
+                            LastName = "Godefroid"
+                        },
+                        new
+                        {
+                            Id = 2,
+                            Created = new DateTime(2019, 11, 9, 12, 28, 57, 850, DateTimeKind.Local).AddTicks(5763),
+                            FirstName = "Phillipe",
+                            LastName = "Champagne"
+                        },
+                        new
+                        {
+                            Id = 3,
+                            Created = new DateTime(2019, 11, 9, 12, 28, 57, 850, DateTimeKind.Local).AddTicks(5814),
+                            FirstName = "Baptiste",
+                            LastName = "Bourgogne"
                         });
                 });
 
@@ -234,6 +363,19 @@ namespace BookService.WebAPI.Migrations
                     b.HasOne("BookService.WebAPI.Models.Publisher", "Publisher")
                         .WithMany()
                         .HasForeignKey("PublisherId")
+                        .OnDelete(DeleteBehavior.Cascade);
+                });
+
+            modelBuilder.Entity("BookService.WebAPI.Models.Rating", b =>
+                {
+                    b.HasOne("BookService.WebAPI.Models.Book", "Book")
+                        .WithMany("Ratings")
+                        .HasForeignKey("BookId")
+                        .OnDelete(DeleteBehavior.Cascade);
+
+                    b.HasOne("BookService.WebAPI.Models.Reader", "Reader")
+                        .WithMany("Ratings")
+                        .HasForeignKey("ReaderId")
                         .OnDelete(DeleteBehavior.Cascade);
                 });
 #pragma warning restore 612, 618
